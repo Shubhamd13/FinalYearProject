@@ -1,0 +1,4 @@
+https://github.com/duyunshu/bert-sentiment-analysis
+https://towardsdatascience.com/multi-class-sentiment-analysis-using-bert-86657a2af156
+Jsoup
+spring
