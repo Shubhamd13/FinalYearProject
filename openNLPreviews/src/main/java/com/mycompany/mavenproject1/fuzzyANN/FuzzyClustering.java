@@ -32,7 +32,7 @@ public class FuzzyClustering {
 
                 }
               
-                if(cluster.size()>0)
+                //if(cluster.size()>0)
                fincluster.add(cluster);
     
         
