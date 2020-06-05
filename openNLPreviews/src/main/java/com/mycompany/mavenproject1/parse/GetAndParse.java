@@ -38,15 +38,22 @@ public class GetAndParse {
          Document currentPage=getDocFromUrl(url+"1");
          //loop to get pages
          //Showing 1-10 of 2,752 reviews
+         int size = currentPage.select("[data-hook='cr-filter-info-review-count']").size();
+         if(size==0) {
+        	 return allReviews;
+         }
          Element count = currentPage.select("[data-hook='cr-filter-info-review-count']").get(0);
          String scount=count.text();
          int pos=scount.indexOf("of");
          int noOfReviews=((Long) NumberFormat.getNumberInstance(java.util.Locale.US).parse(scount.substring(pos+3))).intValue();
          int numberOfPages=noOfReviews/10;
          numberOfPages=(numberOfPages<10)?(numberOfPages):(10);
-         for (int i = 2; i <= numberOfPages; i++) {
+         if(noOfReviews>0 && numberOfPages==0) {
+        	 numberOfPages=1;
+         }
+         for (int i = 1; i <= numberOfPages; i++) {
              allReviews.addAll(getReviewsFromDoc(currentPage));
-             currentPage=getDocFromUrl(url+Integer.toString(i));
+             currentPage=getDocFromUrl(url+Integer.toString(i+1));
          }
          return allReviews;
     }

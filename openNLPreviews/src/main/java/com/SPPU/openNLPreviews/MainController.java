@@ -34,6 +34,8 @@ import jxl.write.WriteException;
 		    Map<String, Object> rtn = new LinkedHashMap<>();
 		    rtn.put("pic", asin);
 		    ArrayList data=new GetAndParse().getData(asin);
+		    if(data.size()>0) {
+		    System.out.println("scrapes are "+data);
 		    try {
 		    	ArrayList classList=new ClassificationProcess().initProcess(data);
 		    	ArrayList values=new ArrayList();
@@ -47,8 +49,9 @@ import jxl.write.WriteException;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    rtn.put("potato", "King Potato");
-
+		    }else {
+		    	rtn.put("error", "No reviews");
+		    }
 		    return rtn;
 
 		}

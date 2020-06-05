@@ -28,9 +28,16 @@ function myFunction() {
 		//sendResponse({res:data});
 		console.log(data);
 		var labels=['WORST', 'DISAPPOINTED', 'AVERAGE', 'SATISFACTORY', 'EXCELLENT'];
+		if(data.hasOwnProperty("error")){
+			document.getElementById("text").innerText="NO REVIEWS!";
+		}else{
 		var dataArr=JSON.parse(data.values);
 		plotChart(labels,dataArr);
+		}
 		showPage();
+	  }).catch((error)=>{
+			document.getElementById("text").innerText="Request timed out!";
+			showPage();
 	  });
 	});
 }
@@ -95,7 +102,14 @@ function plotChart(labels,dataArr){
 				}
 			  }
 			},
-			onClick:clickHandle
+			onClick:clickHandle,
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
 		  }
 	});
 	ctx = document.getElementById('piechart').getContext('2d');
@@ -125,7 +139,42 @@ function plotChart(labels,dataArr){
 
 		// Configuration options go here
 		options: {
-			onClick:clickHandle
+			onClick:clickHandle,
+			/*
+			tooltips: {
+				enabled: false
+			},
+			plugins: {
+				datalabels: {
+					formatter: (value, ctx) => {
+						let sum = 0;
+						let dataArr = ctx.chart.data.datasets[0].data;
+						dataArr.map(data => {
+							sum += data;
+						});
+						let percentage = (value*100 / sum).toFixed(2)+"%";
+						return percentage;
+					},
+					color: '#f00',
+				}
+			}*/
+			animation: {
+			  animateScale: true,
+			  animateRotate: true
+			},
+			tooltips: {
+			  callbacks: {
+				label: function(tooltipItem, data) {
+					var dataset = data.datasets[tooltipItem.datasetIndex];
+				  var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+					return previousValue + currentValue;
+				  });
+				  var currentValue = dataset.data[tooltipItem.index];
+				  var percentage = Math.floor(((currentValue/total) * 100)+0.5);         
+				  return percentage + "%";
+				}
+			  }
+			}
 		}
 });
 }
